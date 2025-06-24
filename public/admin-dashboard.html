@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - IMEI Checker</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Poppins, sans-serif; padding: 2rem; background: #f4f4f4; }
+    h1 { margin-bottom: 1rem; }
+    .table { width: 100%; border-collapse: collapse; background: #fff; }
+    .table th, .table td { border: 1px solid #ddd; padding: 0.75rem; text-align: left; }
+    .table th { background: #333; color: white; }
+    .actions button { margin-right: 0.5rem; padding: 0.4rem 0.8rem; }
+    .approved { color: green; }
+    .pending { color: orange; }
+    .stolen { color: red; }
+  </style>
+</head>
+<body>
+
+  <h1>📱 IMEI Admin Dashboard</h1>
+
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>IMEI</th>
+        <th>Status</th>
+        <th>Report</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="imei-table-body"></tbody>
+  </table>
+
+  <button onclick="logout()">Logout</button>
+
+
+  <script>
+    async function logout() {
+  await fetch('/api/admin/logout', { method: 'POST' });
+  window.location.href = '/admin-login.html';
+}
+
+    async function loadIMEIs() {
+      const res = await fetch('/api/imeis');
+      const data = await res.json();
+      const tbody = document.getElementById('imei-table-body');
+      tbody.innerHTML = '';
+
+      data.forEach(entry => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${entry.imei}</td>
+          <td class="${entry.status}">${entry.status.replace('_', ' ')}</td>
+          <td>${entry.report ? `<a href="${entry.report}" target="_blank">View Report</a>` : '-'}</td>
+          <td class="actions">
+            ${entry.status === 'pending_removal' ? `<button onclick="approveRemoval('${entry.imei}')">✅ Approve</button>` : ''}
+            <button onclick="deleteIMEI('${entry.imei}')">🗑️ Delete</button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function approveRemoval(imei) {
+      const confirmed = confirm(`Approve removal for IMEI: ${imei}?`);
+      if (!confirmed) return;
+
+      const res = await fetch('/api/admin/approve-removal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imei }),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+      loadIMEIs();
+    }
+
+    async function deleteIMEI(imei) {
+      const confirmed = confirm(`Delete IMEI: ${imei}?`);
+      if (!confirmed) return;
+
+      const res = await fetch('/api/admin/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imei }),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+      loadIMEIs();
+    }
+
+    // Initial load
+    loadIMEIs();
+  </script>
+  
+
+</body>
+</html>
+

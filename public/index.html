@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMEI Checker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+
+
+<body>
+
+  <div class="header-bar">
+  <h1>
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="black" viewBox="0 0 24 24">
+      <path d="M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM7 4h10v16H7V4Zm5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
+    </svg>
+    Gapu remaIMEI
+  </h1>
+
+  <a href="/Users/liberty/Documents/IMEI Checker/public/admin-login.html" class="admin-btn">🔐 Admin Login</a>
+
+</div>
+
+
+  <div class="container">
+    <div class="card">
+      <h2>Check IMEI</h2>
+      <form id="check-form">
+        <input type="text" id="check-imei" placeholder="Enter IMEI to Check" />
+        <button type="submit">Check</button>
+        <div class="result" id="check-result"></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Report Stolen</h2>
+      <form id="report-form">
+        <input type="text" id="report-imei" placeholder="Enter IMEI to Report" />
+        <button type="submit">Report</button>
+        <div class="result" id="report-result"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <div class="card">
+  <h2>Request Removal</h2>
+  <form id="remove-form" enctype="multipart/form-data">
+    <input type="text" id="remove-imei" placeholder="Enter IMEI to Request Removal" />
+    <input type="file" id="police-report" accept=".pdf,.jpg,.png,.jpeg" />
+    <button type="submit">Request Removal</button>
+    <div class="result" id="remove-result"></div>
+  </form>
+</div>
+
+</body>
+</html>
